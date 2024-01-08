@@ -147,3 +147,7 @@ dmypy.json
 cython_debug/
 
 *.ckpt
+
+# mine
+output/
+!run_v2e.sh

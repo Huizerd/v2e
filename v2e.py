@@ -475,7 +475,9 @@ def main():
                 video_path=None if args.skip_video_output else output_folder,
                 vid_orig=None if args.skip_video_output else vid_orig,
                 vid_slomo=None if args.skip_video_output else vid_slomo,
-                preview=preview, batch_size=batch_size)
+                preview=preview, batch_size=batch_size,
+                avi_frame_rate=avi_frame_rate,
+            )
 
     if not synthetic_input and not auto_timestamp_resolution:
         logger.info(
