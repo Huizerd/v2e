@@ -50,5 +50,5 @@ if __name__ == "__main__":
 
     # stack clips
     clip = clips_array([[image_clip, event_clip]])
-    clip.write_videofile(event_file.parent / "video.mp4", codec="libx264", bitrate="30M")
+    clip.write_videofile(str(event_file.parent / "event_frame_video.mp4"), codec="libx264", bitrate="30M")
     

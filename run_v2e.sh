@@ -1,37 +1,33 @@
 #!/usr/bin/env bash
 
-# clean slomo 1ms
-python v2e.py \
-    -i input/lava \
-    --overwrite \
-    --timestamp_resolution 0.001 \
-    --auto_timestamp_resolution true \
-    --dvs_exposure source \
-    --output_folder output/lava_slomo_clean_1ms \
-    --dvs_params clean \
-    --dvs_h5 lava.h5 \
-    --dvs_aedat4 lava.aedat4 \
-    --dvs_vid lava.avi \
-    --no_preview \
-    --output_height 180 \
-    --output_width 180 \
-    --input_frame_rate 20 \
-    --avi_frame_rate 20
+# go over all materials and motions
+materials=(aerial_rocks brick carpet fabric grass lava lego water)
+motions=(x-slow x-medium x-fast y-slow y-medium y-fast z-slow z-medium z-fast nx-slow nx-medium nx-fast ny-slow ny-medium ny-fast r-slow r-medium r-fast nr-slow nr-medium nr-fast random-bezier)
+for material in ${materials[@]}; do
+    for motion in ${motions[@]}; do
+        echo "Processing $material with $motion"
 
-# noisy slomo 1ms
-python v2e.py \
-    -i input/lava \
-    --overwrite \
-    --timestamp_resolution 0.001 \
-    --auto_timestamp_resolution true \
-    --dvs_exposure source \
-    --output_folder output/lava_slomo_noisy_1ms \
-    --dvs_params noisy \
-    --dvs_h5 lava.h5 \
-    --dvs_aedat4 lava.aedat4 \
-    --dvs_vid lava.avi \
-    --no_preview \
-    --output_height 180 \
-    --output_width 180 \
-    --input_frame_rate 20 \
-    --avi_frame_rate 20
+        # generate events
+        # noisy slomo 1ms, noisy looks better than clean
+        # TODO: getting error about timestamp/cutoff freq, but lowering to 0.0001 is very slow
+        python v2e.py \
+            -i ../BlenderProc/event_planar/output/$material/$motion/images \
+            --overwrite \
+            --timestamp_resolution 0.001 \
+            --auto_timestamp_resolution true \
+            --dvs_exposure source \
+            --output_folder output/$material/$motion \
+            --dvs_params noisy \
+            --dvs_h5 events.h5 \
+            --no_preview \
+            --output_height 180 \
+            --output_width 180 \
+            --input_frame_rate 20
+        
+        # render video
+        python render_video.py \
+            ../BlenderProc/event_planar/output/$material/$motion/images \
+            output/$material/$motion/events.h5
+
+    done
+done
