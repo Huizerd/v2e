@@ -48,3 +48,5 @@ if __name__ == "__main__":
         f.create_dataset("euler/x", data=gt["euler"][:, 0])
         f.create_dataset("euler/y", data=gt["euler"][:, 1])
         f.create_dataset("euler/z", data=gt["euler"][:, 2])
+
+        f.attrs["t0"] = 0
