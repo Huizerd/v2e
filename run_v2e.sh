@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # go over all materials and motions
-materials=(aerial_rocks brick carpet fabric grass lava lego water)
+materials=(aerial_rocks brick carpet fabric grass lava lego water stripes)
 motions=(x-slow x-medium x-fast y-slow y-medium y-fast z-slow z-medium z-fast nx-slow nx-medium nx-fast ny-slow ny-medium ny-fast r-slow r-medium r-fast nr-slow nr-medium nr-fast random-bezier)
 for material in ${materials[@]}; do
     for motion in ${motions[@]}; do
@@ -28,6 +28,12 @@ for material in ${materials[@]}; do
         python render_video.py \
             ../BlenderProc/event_planar/output/$material/$motion/images \
             output/$material/$motion/events.h5
+        
+        # convert h5
+        python convert_h5.py \
+            output/$material/$motion/events.h5 \
+            ../BlenderProc/event_planar/output/$material/$motion/hdf5 \
+            output/compatible_h5
 
     done
 done
