@@ -30,23 +30,24 @@ if __name__ == "__main__":
 
     gt["position"] = np.stack(gt["position"])
     gt["euler"] = np.stack(gt["euler"])
-    gt["time"] = (np.stack(gt["time"]) / 20 * 1e6).astype(int)  # 20 fps to ms
+    gt["time"] = np.stack(gt["time"]) / 20  # 20 fps to s
 
     seq_name = f"{event_file.parent.parent.stem}_{event_file.parent.stem}".replace("-", "_")
     with h5py.File(output_dir / f"{seq_name}.h5", "w") as f:
-        f.create_dataset("events/ts", data=events[:, 0])
-        f.create_dataset("events/xs", data=events[:, 1])
+        f.create_dataset("events/ts", data=events[:, 0] / 1e6)
+        f.create_dataset("events/xs", data=events[:, 1]) 
         f.create_dataset("events/ys", data=events[:, 2])
         f.create_dataset("events/ps", data=events[:, 3])
 
-        f.create_dataset("position/ts", data=gt["time"])
+        f.create_dataset("position/ts", data=gt["time"][:, 0])
         f.create_dataset("position/x", data=gt["position"][:, 0])
         f.create_dataset("position/y", data=gt["position"][:, 1])
         f.create_dataset("position/z", data=gt["position"][:, 2])
 
-        f.create_dataset("euler/ts", data=gt["time"])
+        f.create_dataset("euler/ts", data=gt["time"][:, 0])
         f.create_dataset("euler/x", data=gt["euler"][:, 0])
         f.create_dataset("euler/y", data=gt["euler"][:, 1])
         f.create_dataset("euler/z", data=gt["euler"][:, 2])
 
         f.attrs["t0"] = 0
+        f.attrs["duration"] = gt["time"][-1, 0] - gt["time"][0, 0]
