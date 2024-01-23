@@ -149,5 +149,5 @@ cython_debug/
 *.ckpt
 
 # mine
-output/
+output*/
 !run_v2e.sh

@@ -10,6 +10,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("frame_dir", type=str)
     parser.add_argument("event_file", type=str)
+    parser.add_argument("frame_fps", type=int)
     args = parser.parse_args()
 
     event_file = Path(args.event_file)
@@ -45,10 +46,10 @@ if __name__ == "__main__":
     event_clip = event_clip.resize(8)
 
     # write image frames to video
-    image_clip = ImageSequenceClip(frame_dir, fps=20)
+    image_clip = ImageSequenceClip(frame_dir, fps=args.frame_fps)
     image_clip = image_clip.resize(8)
 
     # stack clips
     clip = clips_array([[image_clip, event_clip]])
-    clip.write_videofile(str(event_file.parent / "event_frame_video.mp4"), codec="libx264", bitrate="30M")
+    clip.write_videofile(str(event_file.parent / "event_frame_video.mp4"), codec="libx264", bitrate="30M", fps=60)
     

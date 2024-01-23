@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     gt["position"] = np.stack(gt["position"])
     gt["euler"] = np.stack(gt["euler"])
-    gt["time"] = np.stack(gt["time"]) / 20  # 20 fps to s
+    gt["time"] = np.stack(gt["time"])  # already in s
 
     seq_name = f"{event_file.parent.parent.stem}_{event_file.parent.stem}".replace("-", "_")
     with h5py.File(output_dir / f"{seq_name}.h5", "w") as f:

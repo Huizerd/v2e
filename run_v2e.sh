@@ -8,7 +8,7 @@ for material in ${materials[@]}; do
         echo "Processing $material with $motion"
 
         # generate events
-        # noisy slomo 1ms, noisy looks better than clean
+        # noisy slomo 1ms, clean looks better than noisy
         # TODO: getting error about timestamp/cutoff freq, but lowering to 0.0001 is very slow
         python v2e.py \
             -i ../BlenderProc/event_planar/output/$material/$motion/images \
@@ -17,18 +17,19 @@ for material in ${materials[@]}; do
             --auto_timestamp_resolution true \
             --dvs_exposure source \
             --output_folder output/$material/$motion \
-            --dvs_params noisy \
+            --dvs_params clean \
             --dvs_h5 events.h5 \
             --no_preview \
             --output_height 180 \
             --output_width 180 \
-            --input_frame_rate 20
-        
+            --input_frame_rate 100
+
         # render video
         python render_video.py \
             ../BlenderProc/event_planar/output/$material/$motion/images \
-            output/$material/$motion/events.h5
-        
+            output/$material/$motion/events.h5 \
+            100
+
         # convert h5
         python convert_h5.py \
             output/$material/$motion/events.h5 \
